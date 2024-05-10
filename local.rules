@@ -1,0 +1,19 @@
+# $Id: local.rules,v 1.11 2004/07/23 20:15:44 bmc Exp $
+# ----------------
+# LOCAL RULES
+# ----------------
+# This file intentionally does not come with signatures.  Put your local
+# additions here.
+
+# EternalBlue Detection Algorithm Implemented Below
+alert tcp any any -> $HOME_NET 445 (msg:"EternalBlue Attack Alert"; content:"|FF 53 4D 42|"; content:"|49 50 43 24|", distance 53, within 10; sid:100002; rev:1)
+
+
+
+# HTA Detection Algorithm Implemented Below
+alert tcp any any -> $HOME_NET any (msg:"HTA Attack - Client Request Alert"; content:"|2E 68 74 61|"; http_uri; content:"GET"; http_method; sid:10004; rev:1)
+alert tcp any any -> $HOME_NET any (msg:"HTA Attack - Server Response Alert"; content:"VBScript"; content:"window.moveTo -4000, -4000", distance 5, within 26; content:"Wscript.Shell", distance 26, within 22;content:"powershell.exe -nop -w hidden -e"; sid:100005; rev:1)
+
+
+# Bluekeep Detection Algorithm Implemented Below
+alert tcp any any -> $HOME_NET 3389 (msg:"Bluekeep Attack Alert"; content:"|03 00 00 2D|"; content:"|43 6F 6F 6B 69 65 3A 20 6D 73 74 73 68 61 73 68 3D|", distance 7;  content:"|00 00 00|", distance 13, within 4; sid:100006; rev:1)
